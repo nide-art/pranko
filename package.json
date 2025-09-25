@@ -35,6 +35,8 @@
     "expo-system-ui": "~6.0.7",
     "expo-web-browser": "~15.0.7",
     "lucide-react-native": "^0.460.0",
+    "metro": "^0.76.8",
+    "metro-config": "^0.76.8",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "^0.81.0",
@@ -58,9 +60,5 @@
     "express": "^5.1.0",
     "typescript": "^5.6.3",
     "vite": "^7.1.7"
-  },
-  "overrides": {
-    "metro": "0.76.8",
-    "metro-babel-transformer": "0.76.8"
   }
 }
