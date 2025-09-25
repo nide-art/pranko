@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Din Kompletta Swish App - Alla Sidor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .app-content {
+            height: calc(100% - 44px - 83px);
+            overflow-y: auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .tab-bar {
+            height: 83px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 12px;
+        }
+        
+        .tab-item.active {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-item.active .tab-icon {
+            fill: #667eea;
+        }
+        
+        .tab-label {
+            font-size: 10px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .tab-item.active .tab-label {
+            color: #667eea;
+        }
+        
+        .page {
+            display: none;
+            padding: 20px;
+            height: 100%;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .balance-card {
+            text-align: center;
+            color: white;
+        }
+        
+        .balance-label {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .balance-change {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .quick-action {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 10px;
+            fill: white;
+        }
+        
+        .action-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .transactions-section {
+            color: white;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .transaction-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-subtitle {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .amount-positive {
+            color: #48bb78;
+        }
+        
+        .amount-negative {
+            color: #f56565;
+        }
+        
+        .card-item {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-type {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .card-balance {
+            margin-bottom: 20px;
+        }
+        
+        .card-balance-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        .card-balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .card-number {
+            font-size: 16px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .profile-section {
+            color: white;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-phone {
+            font-size: 16px;
+            opacity: 0.7;
+        }
+        
+        .settings-list {
+            color: white;
+        }
+        
+        .setting-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .setting-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .setting-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .setting-label {
+            font-size: 16px;
+        }
+        
+        .setting-value {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 10px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>🔋 100%</span>
+            </div>
+            
+            <!-- App Content -->
+            <div class="app-content">
+                <!-- Home Page -->
+                <div class="page active" id="home-page">
+                    <div class="app-header">
+                        <h1 class="app-title" id="app-title">Swish</h1>
+                        <div style="position: relative;">
+                            <svg class="tab-icon" viewBox="0 0 24 24">
+                                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                            </svg>
+                            <div class="notification-badge">3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" onclick="changeLanguage('sv')">🇸🇪 SV</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 ES</button>
+                        <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+                        <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+                        <button class="lang-btn" onclick="changeLanguage('zh')">🇨🇳 ZH</button>
+                        <button class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 RU</button>
+                    </div>
+                    
+                    <div class="glass-card balance-card">
+                        <div class="balance-label" id="balance-label">Saldo</div>
+                        <div class="balance-amount" id="balance-amount">12 450 SEK</div>
+                        <div class="balance-change" id="balance-change">+2.5% denna månad</div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="showAnimation('sent')">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                            <div class="action-label" id="send-money">Skicka pengar</div>
+                        </div>
+                        <div class="quick-action" onclick="showAnimation('received')">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <div class="action-label" id="request-money">Begär pengar</div>
+                        </div>
+                    </div>
+                    
+                    <div class="transactions-section">
+                        <h3 class="section-title" id="recent-transactions">Senaste transaktioner</h3>
+                        <div id="transactions-list">
+                            <!-- Transactions will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cards Page -->
+                <div class="page" id="cards-page">
+                    <div class="app-header">
+                        <h1 class="app-title" id="cards-title">Kort</h1>
+                        <svg class="tab-icon" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" onclick="changeLanguage('sv')">🇸🇪 SV</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 ES</button>
+                        <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+                        <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+                        <button class="lang-btn" onclick="changeLanguage('zh')">🇨🇳 ZH</button>
+                        <button class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 RU</button>
+                    </div>
+                    
+                    <div class="card-item">
+                        <div class="card-header">
+                            <div class="card-type" id="card-type">Betalkort</div>
+                            <svg class="tab-icon" viewBox="0 0 24 24">
+                                <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                            </svg>
+                        </div>
+                        <div class="card-balance">
+                            <div class="card-balance-label" id="card-balance-label">Tillgängligt saldo</div>
+                            <div class="card-balance-amount" id="card-balance-amount">12 450 SEK</div>
+                        </div>
+                        <div class="card-number">**** **** **** 1234</div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <h3 class="section-title" id="card-settings">Kortinställningar</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                                    </svg>
+                                    <span class="setting-label" id="fraud-protection">Bedrägeriskydd</span>
+                                </div>
+                                <span class="setting-value" id="enabled">Aktiverat</span>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                    <span class="setting-label" id="contactless">Kontaktlösa betalningar</span>
+                                </div>
+                                <span class="setting-value" id="enabled2">Aktiverat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- History Page -->
+                <div class="page" id="history-page">
+                    <div class="app-header">
+                        <h1 class="app-title" id="history-title">Historik</h1>
+                        <svg class="tab-icon" viewBox="0 0 24 24">
+                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" onclick="changeLanguage('sv')">🇸🇪 SV</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 ES</button>
+                        <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+                        <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+                        <button class="lang-btn" onclick="changeLanguage('zh')">🇨🇳 ZH</button>
+                        <button class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 RU</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="income-value">+8 450 SEK</div>
+                            <div class="stat-label" id="income-label">Inkomster</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="expense-value">-3 200 SEK</div>
+                            <div class="stat-label" id="expense-label">Utgifter</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterTransactions('all')" id="filter-all">Alla</button>
+                        <button class="filter-btn" onclick="filterTransactions('income')" id="filter-income">Inkomster</button>
+                        <button class="filter-btn" onclick="filterTransactions('expense')" id="filter-expense">Utgifter</button>
+                    </div>
+                    
+                    <div id="history-transactions">
+                        <!-- History transactions will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Profile Page -->
+                <div class="page" id="profile-page">
+                    <div class="app-header">
+                        <h1 class="app-title" id="profile-title">Profil</h1>
+                        <svg class="tab-icon" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" onclick="changeLanguage('sv')">🇸🇪 SV</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 ES</button>
+                        <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+                        <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+                        <button class="lang-btn" onclick="changeLanguage('zh')">🇨🇳 ZH</button>
+                        <button class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 RU</button>
+                    </div>
+                    
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-name" id="profile-name">Anna Andersson</div>
+                        <div class="profile-phone">+46 70 123 45 67</div>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <span class="setting-label" id="verification-level">Verifieringsnivå</span>
+                                </div>
+                                <span class="setting-value" id="verified">Verifierad</span>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                                    </svg>
+                                    <span class="setting-label" id="security-level">Säkerhetsnivå</span>
+                                </div>
+                                <span class="setting-value" id="high">Hög</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Page -->
+                <div class="page" id="settings-page">
+                    <div class="app-header">
+                        <h1 class="app-title" id="settings-title">Inställningar</h1>
+                        <svg class="tab-icon" viewBox="0 0 24 24">
+                            <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="language-switcher">
+                        <button class="lang-btn active" onclick="changeLanguage('sv')">🇸🇪 SV</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">🇺🇸 EN</button>
+                        <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 ES</button>
+                        <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+                        <button class="lang-btn" onclick="changeLanguage('de')">🇩🇪 DE</button>
+                        <button class="lang-btn" onclick="changeLanguage('zh')">🇨🇳 ZH</button>
+                        <button class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 RU</button>
+                    </div>
+                    
+                    <div class="glass-card">
+                        <h3 class="section-title" id="app-settings">Appinställningar</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.01-4.65.51-6.81L12.87 15.07zm-7.37-1.9c.86-.78 1.8-1.16 2.8-1.16.7 0 1.38.22 2.02.65l8.95-9.57-.78-.78c-.78-.78-2.05-.78-2.83 0L7.29 9.68c-.78.78-.78 2.05 0 2.83l.78.78z"/>
+                                    </svg>
+                                    <span class="setting-label" id="language-setting">Språk</span>
+                                </div>
+                                <span class="setting-value" id="current-language">Svenska</span>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                                    </svg>
+                                    <span class="setting-label" id="currency-setting">Valuta</span>
+                                </div>
+                                <span class="setting-value" id="current-currency">SEK</span>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <svg class="setting-icon" viewBox="0 0 24 24">
+                                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                                    </svg>
+                                    <span class="setting-label" id="notifications-setting">Notifikationer</span>
+                                </div>
+                                <span class="setting-value" id="notifications-enabled">Aktiverat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Bar -->
+            <div class="tab-bar">
+                <div class="tab-item active" onclick="showPage('home')">
+                    <svg class="tab-icon" viewBox="0 0 24 24">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    <span class="tab-label" id="tab-home">Hem</span>
+                </div>
+                <div class="tab-item" onclick="showPage('cards')">
+                    <svg class="tab-icon" viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                    </svg>
+                    <span class="tab-label" id="tab-cards">Kort</span>
+                </div>
+                <div class="tab-item" onclick="showPage('history')">
+                    <svg class="tab-icon" viewBox="0 0 24 24">
+                        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                    </svg>
+                    <span class="tab-label" id="tab-history">Historik</span>
+                </div>
+                <div class="tab-item" onclick="showPage('profile')">
+                    <svg class="tab-icon" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span class="tab-label" id="tab-profile">Profil</span>
+                </div>
+                <div class="tab-item" onclick="showPage('settings')">
+                    <svg class="tab-icon" viewBox="0 0 24 24">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    <span class="tab-label" id="tab-settings">Inställningar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language translations
+        const translations = {
+            sv: {
+                appTitle: 'Swish',
+                balance: 'Saldo',
+                balanceChange: '+2.5% denna månad',
+                sendMoney: 'Skicka pengar',
+                requestMoney: 'Begär pengar',
+                recentTransactions: 'Senaste transaktioner',
+                cards: 'Kort',
+                cardType: 'Betalkort',
+                cardBalanceLabel: 'Tillgängligt saldo',
+                cardSettings: 'Kortinställningar',
+                fraudProtection: 'Bedrägeriskydd',
+                contactless: 'Kontaktlösa betalningar',
+                enabled: 'Aktiverat',
+                history: 'Historik',
+                incomeLabel: 'Inkomster',
+                expenseLabel: 'Utgifter',
+                filterAll: 'Alla',
+                filterIncome: 'Inkomster',
+                filterExpense: 'Utgifter',
+                profile: 'Profil',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Verifieringsnivå',
+                verified: 'Verifierad',
+                securityLevel: 'Säkerhetsnivå',
+                high: 'Hög',
+                settings: 'Inställningar',
+                appSettings: 'Appinställningar',
+                languageSetting: 'Språk',
+                currentLanguage: 'Svenska',
+                currencySetting: 'Valuta',
+                notificationsSetting: 'Notifikationer',
+                notificationsEnabled: 'Aktiverat',
+                tabHome: 'Hem',
+                tabCards: 'Kort',
+                tabHistory: 'Historik',
+                tabProfile: 'Profil',
+                tabSettings: 'Inställningar'
+            },
+            en: {
+                appTitle: 'Swish',
+                balance: 'Balance',
+                balanceChange: '+2.5% this month',
+                sendMoney: 'Send money',
+                requestMoney: 'Request money',
+                recentTransactions: 'Recent transactions',
+                cards: 'Cards',
+                cardType: 'Debit card',
+                cardBalanceLabel: 'Available balance',
+                cardSettings: 'Card settings',
+                fraudProtection: 'Fraud protection',
+                contactless: 'Contactless payments',
+                enabled: 'Enabled',
+                history: 'History',
+                incomeLabel: 'Income',
+                expenseLabel: 'Expenses',
+                filterAll: 'All',
+                filterIncome: 'Income',
+                filterExpense: 'Expenses',
+                profile: 'Profile',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Verification level',
+                verified: 'Verified',
+                securityLevel: 'Security level',
+                high: 'High',
+                settings: 'Settings',
+                appSettings: 'App settings',
+                languageSetting: 'Language',
+                currentLanguage: 'English',
+                currencySetting: 'Currency',
+                notificationsSetting: 'Notifications',
+                notificationsEnabled: 'Enabled',
+                tabHome: 'Home',
+                tabCards: 'Cards',
+                tabHistory: 'History',
+                tabProfile: 'Profile',
+                tabSettings: 'Settings'
+            },
+            es: {
+                appTitle: 'Swish',
+                balance: 'Saldo',
+                balanceChange: '+2.5% este mes',
+                sendMoney: 'Enviar dinero',
+                requestMoney: 'Solicitar dinero',
+                recentTransactions: 'Transacciones recientes',
+                cards: 'Tarjetas',
+                cardType: 'Tarjeta de débito',
+                cardBalanceLabel: 'Saldo disponible',
+                cardSettings: 'Configuración de tarjeta',
+                fraudProtection: 'Protección contra fraude',
+                contactless: 'Pagos sin contacto',
+                enabled: 'Habilitado',
+                history: 'Historial',
+                incomeLabel: 'Ingresos',
+                expenseLabel: 'Gastos',
+                filterAll: 'Todos',
+                filterIncome: 'Ingresos',
+                filterExpense: 'Gastos',
+                profile: 'Perfil',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Nivel de verificación',
+                verified: 'Verificado',
+                securityLevel: 'Nivel de seguridad',
+                high: 'Alto',
+                settings: 'Configuración',
+                appSettings: 'Configuración de la app',
+                languageSetting: 'Idioma',
+                currentLanguage: 'Español',
+                currencySetting: 'Moneda',
+                notificationsSetting: 'Notificaciones',
+                notificationsEnabled: 'Habilitado',
+                tabHome: 'Inicio',
+                tabCards: 'Tarjetas',
+                tabHistory: 'Historial',
+                tabProfile: 'Perfil',
+                tabSettings: 'Configuración'
+            },
+            fr: {
+                appTitle: 'Swish',
+                balance: 'Solde',
+                balanceChange: '+2.5% ce mois',
+                sendMoney: 'Envoyer de l\'argent',
+                requestMoney: 'Demander de l\'argent',
+                recentTransactions: 'Transactions récentes',
+                cards: 'Cartes',
+                cardType: 'Carte de débit',
+                cardBalanceLabel: 'Solde disponible',
+                cardSettings: 'Paramètres de carte',
+                fraudProtection: 'Protection contre la fraude',
+                contactless: 'Paiements sans contact',
+                enabled: 'Activé',
+                history: 'Historique',
+                incomeLabel: 'Revenus',
+                expenseLabel: 'Dépenses',
+                filterAll: 'Tous',
+                filterIncome: 'Revenus',
+                filterExpense: 'Dépenses',
+                profile: 'Profil',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Niveau de vérification',
+                verified: 'Vérifié',
+                securityLevel: 'Niveau de sécurité',
+                high: 'Élevé',
+                settings: 'Paramètres',
+                appSettings: 'Paramètres de l\'app',
+                languageSetting: 'Langue',
+                currentLanguage: 'Français',
+                currencySetting: 'Devise',
+                notificationsSetting: 'Notifications',
+                notificationsEnabled: 'Activé',
+                tabHome: 'Accueil',
+                tabCards: 'Cartes',
+                tabHistory: 'Historique',
+                tabProfile: 'Profil',
+                tabSettings: 'Paramètres'
+            },
+            de: {
+                appTitle: 'Swish',
+                balance: 'Guthaben',
+                balanceChange: '+2.5% diesen Monat',
+                sendMoney: 'Geld senden',
+                requestMoney: 'Geld anfordern',
+                recentTransactions: 'Letzte Transaktionen',
+                cards: 'Karten',
+                cardType: 'Debitkarte',
+                cardBalanceLabel: 'Verfügbares Guthaben',
+                cardSettings: 'Karteneinstellungen',
+                fraudProtection: 'Betrugsschutz',
+                contactless: 'Kontaktlose Zahlungen',
+                enabled: 'Aktiviert',
+                history: 'Verlauf',
+                incomeLabel: 'Einkommen',
+                expenseLabel: 'Ausgaben',
+                filterAll: 'Alle',
+                filterIncome: 'Einkommen',
+                filterExpense: 'Ausgaben',
+                profile: 'Profil',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Verifizierungsstufe',
+                verified: 'Verifiziert',
+                securityLevel: 'Sicherheitsstufe',
+                high: 'Hoch',
+                settings: 'Einstellungen',
+                appSettings: 'App-Einstellungen',
+                languageSetting: 'Sprache',
+                currentLanguage: 'Deutsch',
+                currencySetting: 'Währung',
+                notificationsSetting: 'Benachrichtigungen',
+                notificationsEnabled: 'Aktiviert',
+                tabHome: 'Start',
+                tabCards: 'Karten',
+                tabHistory: 'Verlauf',
+                tabProfile: 'Profil',
+                tabSettings: 'Einstellungen'
+            },
+            zh: {
+                appTitle: 'Swish',
+                balance: '余额',
+                balanceChange: '本月+2.5%',
+                sendMoney: '转账',
+                requestMoney: '请求付款',
+                recentTransactions: '最近交易',
+                cards: '卡片',
+                cardType: '借记卡',
+                cardBalanceLabel: '可用余额',
+                cardSettings: '卡片设置',
+                fraudProtection: '防欺诈保护',
+                contactless: '非接触式支付',
+                enabled: '已启用',
+                history: '历史记录',
+                incomeLabel: '收入',
+                expenseLabel: '支出',
+                filterAll: '全部',
+                filterIncome: '收入',
+                filterExpense: '支出',
+                profile: '个人资料',
+                profileName: 'Anna Andersson',
+                verificationLevel: '验证级别',
+                verified: '已验证',
+                securityLevel: '安全级别',
+                high: '高',
+                settings: '设置',
+                appSettings: '应用设置',
+                languageSetting: '语言',
+                currentLanguage: '中文',
+                currencySetting: '货币',
+                notificationsSetting: '通知',
+                notificationsEnabled: '已启用',
+                tabHome: '首页',
+                tabCards: '卡片',
+                tabHistory: '历史',
+                tabProfile: '个人',
+                tabSettings: '设置'
+            },
+            ru: {
+                appTitle: 'Swish',
+                balance: 'Баланс',
+                balanceChange: '+2.5% в этом месяце',
+                sendMoney: 'Отправить деньги',
+                requestMoney: 'Запросить деньги',
+                recentTransactions: 'Последние транзакции',
+                cards: 'Карты',
+                cardType: 'Дебетовая карта',
+                cardBalanceLabel: 'Доступный баланс',
+                cardSettings: 'Настройки карты',
+                fraudProtection: 'Защита от мошенничества',
+                contactless: 'Бесконтактные платежи',
+                enabled: 'Включено',
+                history: 'История',
+                incomeLabel: 'Доходы',
+                expenseLabel: 'Расходы',
+                filterAll: 'Все',
+                filterIncome: 'Доходы',
+                filterExpense: 'Расходы',
+                profile: 'Профиль',
+                profileName: 'Anna Andersson',
+                verificationLevel: 'Уровень верификации',
+                verified: 'Верифицирован',
+                securityLevel: 'Уровень безопасности',
+                high: 'Высокий',
+                settings: 'Настройки',
+                appSettings: 'Настройки приложения',
+                languageSetting: 'Язык',
+                currentLanguage: 'Русский',
+                currencySetting: 'Валюта',
+                notificationsSetting: 'Уведомления',
+                notificationsEnabled: 'Включено',
+                tabHome: 'Главная',
+                tabCards: 'Карты',
+                tabHistory: 'История',
+                tabProfile: 'Профиль',
+                tabSettings: 'Настройки'
+            }
+        };
+
+        // Currency conversion rates (SEK as base)
+        const currencyRates = {
+            SEK: 1,
+            USD: 0.094,
+            EUR: 0.086,
+            CNY: 0.68,
+            RUB: 9.2
+        };
+
+        let currentLanguage = 'sv';
+        let currentCurrency = 'SEK';
+        let currentPage = 'home';
+
+        // Sample transactions
+        const sampleTransactions = [
+            { id: 1, type: 'received', amount: 500, description: 'Från Maria', time: '14:30', category: 'transfer' },
+            { id: 2, type: 'sent', amount: -250, description: 'Till ICA Supermarket', time: '12:15', category: 'shopping' },
+            { id: 3, type: 'received', amount: 1200, description: 'Lön', time: '09:00', category: 'salary' },
+            { id: 4, type: 'sent', amount: -75, description: 'Spotify Premium', time: 'Igår', category: 'subscription' }
+        ];
+
+        function formatCurrency(amount, currency = currentCurrency) {
+            const convertedAmount = amount * currencyRates[currency];
+            const symbols = { SEK: 'kr', USD: '$', EUR: '€', CNY: '¥', RUB: '₽' };
+            
+            if (currency === 'SEK') {
+                return `${Math.round(convertedAmount).toLocaleString()} ${symbols[currency]}`;
+            } else {
+                return `${symbols[currency]}${convertedAmount.toFixed(2)}`;
+            }
+        }
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text elements
+            const t = translations[lang];
+            
+            // Update all pages
+            document.querySelectorAll('[id]').forEach(element => {
+                if (t[element.id]) {
+                    element.textContent = t[element.id];
+                }
+            });
+            
+            // Update currency display
+            updateCurrencyDisplay();
+            updateTransactions();
+            
+            // Update currency based on language
+            const currencyMap = {
+                'sv': 'SEK',
+                'en': 'USD', 
+                'es': 'EUR',
+                'fr': 'EUR',
+                'de': 'EUR',
+                'zh': 'CNY',
+                'ru': 'RUB'
+            };
+            
+            currentCurrency = currencyMap[lang] || 'SEK';
+            document.getElementById('current-currency').textContent = currentCurrency;
+        }
+
+        function updateCurrencyDisplay() {
+            const baseAmount = 12450; // SEK
+            document.getElementById('balance-amount').textContent = formatCurrency(baseAmount);
+            document.getElementById('card-balance-amount').textContent = formatCurrency(baseAmount);
+            document.getElementById('income-value').textContent = '+' + formatCurrency(8450);
+            document.getElementById('expense-value').textContent = '-' + formatCurrency(3200);
+        }
+
+        function updateTransactions() {
+            const transactionsList = document.getElementById('transactions-list');
+            const historyTransactions = document.getElementById('history-transactions');
+            
+            const transactionHTML = sampleTransactions.map(transaction => {
+                const amount = transaction.amount;
+                const amountClass = amount > 0 ? 'amount-positive' : 'amount-negative';
+                const formattedAmount = amount > 0 ? '+' + formatCurrency(amount) : formatCurrency(amount);
+                
+                return `
+                    <div class="transaction-item fade-in">
+                        <div class="transaction-info">
+                            <div class="transaction-title">${transaction.description}</div>
+                            <div class="transaction-subtitle">${transaction.time}</div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">${formattedAmount}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (transactionsList) transactionsList.innerHTML = transactionHTML;
+            if (historyTransactions) historyTransactions.innerHTML = transactionHTML;
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.add('active');
+            event.target.closest('.tab-item').classList.add('active');
+            
+            currentPage = pageId;
+        }
+
+        function showAnimation(type) {
+            // Simple animation feedback
+            const action = event.target.closest('.quick-action');
+            action.style.transform = 'scale(0.95)';
+            action.style.background = 'rgba(255, 255, 255, 0.3)';
+            
+            setTimeout(() => {
+                action.style.transform = 'scale(1)';
+                action.style.background = 'rgba(255, 255, 255, 0.2)';
+            }, 150);
+            
+            // Add a new transaction
+            const newTransaction = {
+                id: Date.now(),
+                type: type,
+                amount: type === 'sent' ? -Math.floor(Math.random() * 500 + 100) : Math.floor(Math.random() * 1000 + 200),
+                description: type === 'sent' ? 'Till vän' : 'Från kollega',
+                time: 'Nu',
+                category: 'transfer'
+            };
+            
+            sampleTransactions.unshift(newTransaction);
+            updateTransactions();
+        }
+
+        function filterTransactions(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Simple filter implementation - in real app this would filter the actual data
+            console.log('Filtering by:', filter);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrencyDisplay();
+            updateTransactions();
+        });
+    </script>
+</body>
+</html>

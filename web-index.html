@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swish Prank App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .app-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .greeting {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .balance-card {
+            margin: 0 20px 20px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .balance-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .balance-amount {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .balance-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .balance-item {
+            text-align: center;
+        }
+        
+        .balance-item-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .balance-item-value {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 20px 20px;
+        }
+        
+        .quick-action {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        .quick-action-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 8px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quick-action-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .transactions-section {
+            flex: 1;
+            background: white;
+            border-radius: 30px 30px 0 0;
+            margin-top: 20px;
+            padding: 25px 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .transaction {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .transaction:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .amount-negative {
+            color: #e74c3c;
+        }
+        
+        .amount-positive {
+            color: #27ae60;
+        }
+        
+        .language-switcher {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 2px;
+        }
+        
+        .lang-btn.active {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .demo-note {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>🔋 100%</span>
+            </div>
+            
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" onclick="setLanguage('sv')">SV</button>
+                <button class="lang-btn" onclick="setLanguage('de')">DE</button>
+                <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+                <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+                <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+                <button class="lang-btn" onclick="setLanguage('zh')">ZH</button>
+            </div>
+            
+            <div class="app-header">
+                <div class="greeting" id="greeting">Hej Maria!</div>
+            </div>
+            
+            <div class="balance-card">
+                <div class="balance-label" id="balance-label">Tillgängligt saldo</div>
+                <div class="balance-amount" id="balance-amount">21 500,00 kr</div>
+                <div class="balance-details">
+                    <div class="balance-item">
+                        <div class="balance-item-label" id="monthly-income-label">Månadsinkomst</div>
+                        <div class="balance-item-value" id="monthly-income">300,90 kr</div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-item-label" id="today-spent-label">Spenderat idag</div>
+                        <div class="balance-item-value" id="today-spent">600,90 kr</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="quick-action">
+                    <div class="quick-action-icon">💸</div>
+                    <div class="quick-action-text" id="send-text">Skicka</div>
+                </div>
+                <div class="quick-action">
+                    <div class="quick-action-icon">📱</div>
+                    <div class="quick-action-text" id="request-text">Begär</div>
+                </div>
+                <div class="quick-action">
+                    <div class="quick-action-icon">💳</div>
+                    <div class="quick-action-text" id="cards-text">Kort</div>
+                </div>
+                <div class="quick-action">
+                    <div class="quick-action-icon">📊</div>
+                    <div class="quick-action-text" id="budget-text">Budget</div>
+                </div>
+            </div>
+            
+            <div class="transactions-section">
+                <div class="section-title" id="transactions-title">Senaste transaktioner</div>
+                <div id="transactions-list"></div>
+            </div>
+        </div>
+        
+        <div class="demo-note">
+            Detta är en demo som visar de implementerade funktionerna:<br>
+            ✅ Flerspråksstöd ✅ Valutakonvertering ✅ Internationella märken
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                greeting: "Hello Maria!",
+                balanceLabel: "Available balance",
+                monthlyIncomeLabel: "Monthly income",
+                todaySpentLabel: "Spent today",
+                sendText: "Send",
+                requestText: "Request",
+                cardsText: "Cards",
+                budgetText: "Budget",
+                transactionsTitle: "Recent transactions",
+                mcdonalds: "McDonald's",
+                publicTransport: "Public Transport",
+                starbucks: "Starbucks",
+                monthlySalary: "Monthly Salary",
+                mcdonaldsDesc: "Fast food restaurant",
+                publicTransportDesc: "City transportation",
+                starbucksDesc: "Coffee shop",
+                monthlySalaryDesc: "Salary payment"
+            },
+            sv: {
+                greeting: "Hej Maria!",
+                balanceLabel: "Tillgängligt saldo",
+                monthlyIncomeLabel: "Månadsinkomst",
+                todaySpentLabel: "Spenderat idag",
+                sendText: "Skicka",
+                requestText: "Begär",
+                cardsText: "Kort",
+                budgetText: "Budget",
+                transactionsTitle: "Senaste transaktioner",
+                mcdonalds: "McDonald's",
+                publicTransport: "Kollektivtrafik",
+                starbucks: "Starbucks",
+                monthlySalary: "Månadslön",
+                mcdonaldsDesc: "Snabbmatsrestaurang",
+                publicTransportDesc: "Stadstransport",
+                starbucksDesc: "Kafé",
+                monthlySalaryDesc: "Lönutbetalning"
+            },
+            de: {
+                greeting: "Hallo Maria!",
+                balanceLabel: "Verfügbares Guthaben",
+                monthlyIncomeLabel: "Monatseinkommen",
+                todaySpentLabel: "Heute ausgegeben",
+                sendText: "Senden",
+                requestText: "Anfordern",
+                cardsText: "Karten",
+                budgetText: "Budget",
+                transactionsTitle: "Letzte Transaktionen",
+                mcdonalds: "McDonald's",
+                publicTransport: "Öffentliche Verkehrsmittel",
+                starbucks: "Starbucks",
+                monthlySalary: "Monatsgehalt",
+                mcdonaldsDesc: "Fast-Food-Restaurant",
+                publicTransportDesc: "Stadtverkehr",
+                starbucksDesc: "Café",
+                monthlySalaryDesc: "Gehaltszahlung"
+            },
+            fr: {
+                greeting: "Salut Maria!",
+                balanceLabel: "Solde disponible",
+                monthlyIncomeLabel: "Revenu mensuel",
+                todaySpentLabel: "Dépensé aujourd'hui",
+                sendText: "Envoyer",
+                requestText: "Demander",
+                cardsText: "Cartes",
+                budgetText: "Budget",
+                transactionsTitle: "Transactions récentes",
+                mcdonalds: "McDonald's",
+                publicTransport: "Transport Public",
+                starbucks: "Starbucks",
+                monthlySalary: "Salaire Mensuel",
+                mcdonaldsDesc: "Restaurant de restauration rapide",
+                publicTransportDesc: "Transport urbain",
+                starbucksDesc: "Café",
+                monthlySalaryDesc: "Paiement de salaire"
+            },
+            es: {
+                greeting: "¡Hola Maria!",
+                balanceLabel: "Saldo disponible",
+                monthlyIncomeLabel: "Ingresos mensuales",
+                todaySpentLabel: "Gastado hoy",
+                sendText: "Enviar",
+                requestText: "Solicitar",
+                cardsText: "Tarjetas",
+                budgetText: "Presupuesto",
+                transactionsTitle: "Transacciones recientes",
+                mcdonalds: "McDonald's",
+                publicTransport: "Transporte Público",
+                starbucks: "Starbucks",
+                monthlySalary: "Salario Mensual",
+                mcdonaldsDesc: "Restaurante de comida rápida",
+                publicTransportDesc: "Transporte urbano",
+                starbucksDesc: "Cafetería",
+                monthlySalaryDesc: "Pago de salario"
+            },
+            ru: {
+                greeting: "Привет Мария!",
+                balanceLabel: "Доступный баланс",
+                monthlyIncomeLabel: "Месячный доход",
+                todaySpentLabel: "Потрачено сегодня",
+                sendText: "Отправить",
+                requestText: "Запросить",
+                cardsText: "Карты",
+                budgetText: "Бюджет",
+                transactionsTitle: "Последние транзакции",
+                mcdonalds: "McDonald's",
+                publicTransport: "Общественный Транспорт",
+                starbucks: "Starbucks",
+                monthlySalary: "Месячная Зарплата",
+                mcdonaldsDesc: "Ресторан быстрого питания",
+                publicTransportDesc: "Городской транспорт",
+                starbucksDesc: "Кофейня",
+                monthlySalaryDesc: "Выплата зарплаты"
+            },
+            zh: {
+                greeting: "你好玛丽亚！",
+                balanceLabel: "可用余额",
+                monthlyIncomeLabel: "月收入",
+                todaySpentLabel: "今日支出",
+                sendText: "发送",
+                requestText: "请求",
+                cardsText: "卡片",
+                budgetText: "预算",
+                transactionsTitle: "最近交易",
+                mcdonalds: "麦当劳",
+                publicTransport: "公共交通",
+                starbucks: "星巴克",
+                monthlySalary: "月薪",
+                mcdonaldsDesc: "快餐店",
+                publicTransportDesc: "城市交通",
+                starbucksDesc: "咖啡店",
+                monthlySalaryDesc: "工资支付"
+            }
+        };
+
+        const currencyMap = {
+            en: { currency: 'USD', symbol: '$', rate: 0.094, locale: 'en-US' },
+            sv: { currency: 'SEK', symbol: 'kr', rate: 1, locale: 'sv-SE' },
+            de: { currency: 'EUR', symbol: '€', rate: 0.086, locale: 'de-DE' },
+            fr: { currency: 'EUR', symbol: '€', rate: 0.086, locale: 'fr-FR' },
+            es: { currency: 'EUR', symbol: '€', rate: 0.086, locale: 'es-ES' },
+            ru: { currency: 'RUB', symbol: '₽', rate: 8.7, locale: 'ru-RU' },
+            zh: { currency: 'CNY', symbol: '¥', rate: 0.7, locale: 'zh-CN' }
+        };
+
+        const sampleTransactions = [
+            { key: 'mcdonalds', amount: 89, type: 'expense', icon: '🍟' },
+            { key: 'publicTransport', amount: 45, type: 'expense', icon: '🚌' },
+            { key: 'starbucks', amount: 65, type: 'expense', icon: '☕' },
+            { key: 'monthlySalary', amount: 25000, type: 'income', icon: '💰' }
+        ];
+
+        let currentLanguage = 'sv';
+
+        function formatCurrency(amount, language) {
+            const { currency, rate, locale } = currencyMap[language];
+            const convertedAmount = Math.round(amount * rate);
+            
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currency
+            }).format(convertedAmount);
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            updateContent();
+        }
+
+        function updateContent() {
+            const t = translations[currentLanguage];
+            
+            // Update main content
+            document.getElementById('greeting').textContent = t.greeting;
+            document.getElementById('balance-label').textContent = t.balanceLabel;
+            document.getElementById('monthly-income-label').textContent = t.monthlyIncomeLabel;
+            document.getElementById('today-spent-label').textContent = t.todaySpentLabel;
+            document.getElementById('send-text').textContent = t.sendText;
+            document.getElementById('request-text').textContent = t.requestText;
+            document.getElementById('cards-text').textContent = t.cardsText;
+            document.getElementById('budget-text').textContent = t.budgetText;
+            document.getElementById('transactions-title').textContent = t.transactionsTitle;
+            
+            // Update balance amounts
+            document.getElementById('balance-amount').textContent = formatCurrency(21500, currentLanguage);
+            document.getElementById('monthly-income').textContent = formatCurrency(300.90, currentLanguage);
+            document.getElementById('today-spent').textContent = formatCurrency(600.90, currentLanguage);
+            
+            // Update transactions
+            const transactionsList = document.getElementById('transactions-list');
+            transactionsList.innerHTML = '';
+            
+            sampleTransactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.className = 'transaction';
+                
+                const isIncome = transaction.type === 'income';
+                const amount = formatCurrency(transaction.amount, currentLanguage);
+                
+                div.innerHTML = `
+                    <div class="transaction-icon">
+                        ${transaction.icon}
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">${t[transaction.key]}</div>
+                        <div class="transaction-desc">${t[transaction.key + 'Desc']}</div>
+                    </div>
+                    <div class="transaction-amount ${isIncome ? 'amount-positive' : 'amount-negative'}">
+                        ${isIncome ? '+' : '-'}${amount}
+                    </div>
+                `;
+                
+                transactionsList.appendChild(div);
+            });
+        }
+
+        // Initialize with Swedish
+        updateContent();
+    </script>
+</body>
+</html>

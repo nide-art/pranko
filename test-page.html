@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .success {
+            background: #48bb78;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .button {
+            background: #4299e1;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Servern Fungerar!</h1>
+        <p>Din Node.js server körs korrekt på port 8080</p>
+        
+        <div class="success">
+            ✅ HTTP Server: Aktiv<br>
+            ✅ Port 8080: Öppen<br>
+            ✅ Express.js: Installerat
+        </div>
+        
+        <p>Nu ska vi testa att ladda din riktiga app-kod...</p>
+        
+        <a href="/code-viewer.html" class="button">📱 Visa Min App-Kod</a>
+        <a href="/api/app-structure" class="button">🔧 API Test</a>
+        
+        <div style="margin-top: 40px; font-size: 1rem; opacity: 0.8;">
+            <p>Om du ser denna sida betyder det att servern fungerar perfekt!</p>
+            <p>Klicka på "Visa Min App-Kod" för att se din riktiga React Native kod.</p>
+        </div>
+    </div>
+    
+    <script>
+        console.log('✅ Test sida laddad framgångsrikt!');
+        console.log('🚀 Server körs på http://localhost:8080');
+        
+        // Test API anrop
+        fetch('/api/app-structure')
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ API fungerar:', data);
+            })
+            .catch(error => {
+                console.error('❌ API fel:', error);
+            });
+    </script>
+</body>
+</html>

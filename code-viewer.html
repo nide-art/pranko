@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Din Riktiga Swish App - Kod Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        
+        .file-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .file-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #f7fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .file-list li:hover {
+            background: #e2e8f0;
+            border-left-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .file-list li.active {
+            background: #667eea;
+            color: white;
+            border-left-color: #4c51bf;
+        }
+        
+        .code-viewer {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .code-header h3 {
+            color: #4a5568;
+            font-size: 1.3rem;
+        }
+        
+        .code-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #1a202c;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .feature-highlight {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .feature-highlight h4 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .feature-highlight p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .syntax-typescript { color: #3182ce; }
+        .syntax-keyword { color: #d53f8c; font-weight: bold; }
+        .syntax-string { color: #38a169; }
+        .syntax-comment { color: #718096; font-style: italic; }
+        .syntax-function { color: #ed8936; }
+        .syntax-variable { color: #4299e1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Din Riktiga Swish App</h1>
+            <p>Utforska din faktiska React Native/Expo kod med alla implementerade funktioner</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="feature-highlight">
+                    <h4>✨ Implementerade Funktioner</h4>
+                    <p>7 språk • Valutakonvertering • Internationella varumärken • Realtidsuppdateringar</p>
+                </div>
+                
+                <h3>📱 App Sidor</h3>
+                <ul class="file-list" id="app-files">
+                    <li data-type="app/(tabs)" data-file="index.tsx">Startsida (Huvudsida)</li>
+                    <li data-type="app/(tabs)" data-file="cards.tsx">Kort & Betalningar</li>
+                    <li data-type="app/(tabs)" data-file="history.tsx">Transaktionshistorik</li>
+                    <li data-type="app/(tabs)" data-file="profile.tsx">Profil</li>
+                    <li data-type="app/(tabs)" data-file="settings.tsx">Inställningar</li>
+                    <li data-type="app" data-file="_layout.tsx">App Layout</li>
+                </ul>
+                
+                <h3>🧩 Komponenter</h3>
+                <ul class="file-list" id="component-files">
+                    <li data-type="components" data-file="GlassCard.tsx">Glasmorfism Kort</li>
+                    <li data-type="components" data-file="QuickAction.tsx">Snabbåtgärder</li>
+                    <li data-type="components" data-file="PrankModal.tsx">Prank Modal</li>
+                    <li data-type="components" data-file="MoneySentAnimation.tsx">Pengar Skickad Animation</li>
+                </ul>
+                
+                <h3>🌍 Internationalisering</h3>
+                <ul class="file-list" id="i18n-files">
+                    <li data-type="i18n/locales" data-file="sv.json">Svenska</li>
+                    <li data-type="i18n/locales" data-file="en.json">Engelska</li>
+                    <li data-type="i18n/locales" data-file="es.json">Spanska</li>
+                    <li data-type="i18n/locales" data-file="fr.json">Franska</li>
+                    <li data-type="i18n/locales" data-file="de.json">Tyska</li>
+                    <li data-type="i18n/locales" data-file="zh.json">Kinesiska</li>
+                    <li data-type="i18n/locales" data-file="ru.json">Ryska</li>
+                </ul>
+                
+                <h3>⚙️ Kontext & Logik</h3>
+                <ul class="file-list" id="context-files">
+                    <li data-type="contexts" data-file="LanguageContext.tsx">Språkhantering</li>
+                    <li data-type="contexts" data-file="ThemeContext.tsx">Tema</li>
+                    <li data-type="contexts" data-file="AuthContext.tsx">Autentisering</li>
+                    <li data-type="contexts" data-file="PrankContext.tsx">Prank Funktioner</li>
+                </ul>
+                
+                <h3>🔧 Verktyg</h3>
+                <ul class="file-list" id="utils-files">
+                    <li data-type="utils" data-file="currency.ts">Valutakonvertering</li>
+                    <li data-type="utils" data-file="i18n.ts">Språkverktyg</li>
+                </ul>
+            </div>
+            
+            <div class="code-viewer">
+                <div class="code-header">
+                    <h3 id="current-file">Välj en fil för att visa koden</h3>
+                </div>
+                <div class="code-content">
+                    <div class="loading" id="loading">
+                        <p>👋 Välkommen till din riktiga Swish app!</p>
+                        <p>Klicka på en fil i sidopanelen för att se din faktiska kod.</p>
+                        <br>
+                        <p><strong>Detta är din riktiga React Native/Expo kod</strong> - inte en demo!</p>
+                        <p>Alla funktioner är implementerade och redo att köras när Expo-problemen löses.</p>
+                    </div>
+                    <pre id="code-display" style="display: none;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        
+        // Add syntax highlighting
+        function highlightCode(code, filename) {
+            if (!filename.endsWith('.tsx') && !filename.endsWith('.ts') && !filename.endsWith('.json')) {
+                return code;
+            }
+            
+            return code
+                .replace(/\b(import|export|from|const|let|var|function|class|interface|type|enum|async|await|return|if|else|for|while|try|catch|finally)\b/g, '<span class="syntax-keyword">$1</span>')
+                .replace(/'([^']*)'|"([^"]*)"|`([^`]*)`/g, '<span class="syntax-string">$&</span>')
+                .replace(/\/\/.*$/gm, '<span class="syntax-comment">$&</span>')
+                .replace(/\/\*[\s\S]*?\*\//g, '<span class="syntax-comment">$&</span>')
+                .replace(/\b([A-Z][a-zA-Z0-9]*)\b/g, '<span class="syntax-typescript">$1</span>')
+                .replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="syntax-function">$1</span>');
+        }
+        
+        // Load file content
+        async function loadFile(type, filename) {
+            const loading = document.getElementById('loading');
+            const codeDisplay = document.getElementById('code-display');
+            const currentFile = document.getElementById('current-file');
+            
+            loading.style.display = 'block';
+            codeDisplay.style.display = 'none';
+            currentFile.textContent = `Laddar ${filename}...`;
+            
+            try {
+                const response = await fetch(`${API_BASE}/file/${type}/${filename}`);
+                const data = await response.json();
+                
+                if (data.content) {
+                    const highlightedCode = highlightCode(data.content, filename);
+                    codeDisplay.innerHTML = highlightedCode;
+                    currentFile.textContent = `📄 ${filename} (${type})`;
+                    
+                    loading.style.display = 'none';
+                    codeDisplay.style.display = 'block';
+                } else {
+                    throw new Error('Ingen innehåll hittades');
+                }
+            } catch (error) {
+                loading.innerHTML = `
+                    <p style="color: #e53e3e;">❌ Kunde inte ladda filen: ${filename}</p>
+                    <p>Fel: ${error.message}</p>
+                `;
+                currentFile.textContent = `Fel vid laddning av ${filename}`;
+            }
+        }
+        
+        // Add click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileItems = document.querySelectorAll('.file-list li[data-type][data-file]');
+            
+            fileItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    fileItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Load the file
+                    const type = this.getAttribute('data-type');
+                    const filename = this.getAttribute('data-file');
+                    loadFile(type, filename);
+                });
+            });
+            
+            // Load the main index.tsx by default
+            setTimeout(() => {
+                const mainFile = document.querySelector('[data-type="app/(tabs)"][data-file="index.tsx"]');
+                if (mainFile) {
+                    mainFile.click();
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

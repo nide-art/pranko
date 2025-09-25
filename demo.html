@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency & Translation Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .transaction-info {
+            flex: 1;
+        }
+        .transaction-title {
+            font-weight: 600;
+            color: #333;
+        }
+        .transaction-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 18px;
+            color: #e74c3c;
+        }
+        .error-demo {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #38a169;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Multi-Language Currency Demo</h1>
+        
+        <div class="section">
+            <h3>Language Selection</h3>
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="setLanguage('en')">🇺🇸 English</button>
+                <button class="lang-btn" onclick="setLanguage('sv')">🇸🇪 Svenska</button>
+                <button class="lang-btn" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+                <button class="lang-btn" onclick="setLanguage('fr')">🇫🇷 Français</button>
+                <button class="lang-btn" onclick="setLanguage('es')">🇪🇸 Español</button>
+                <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+                <button class="lang-btn" onclick="setLanguage('zh')">🇨🇳 中文</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 id="transactions-title">Sample Transactions</h3>
+            <div id="transactions-container"></div>
+        </div>
+
+        <div class="section">
+            <h3 id="error-title">Error Message Translation</h3>
+            <div class="error-demo" id="error-message"></div>
+        </div>
+
+        <div class="section">
+            <h3 id="features-title">✅ Implemented Features</h3>
+            <ul id="features-list">
+                <li class="success">Multi-language support (7 languages)</li>
+                <li class="success">Currency localization with automatic conversion</li>
+                <li class="success">International brand names (McDonald's, Starbucks, etc.)</li>
+                <li class="success">Translated error messages</li>
+                <li class="success">Proper number formatting per locale</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                transactionsTitle: "Sample Transactions",
+                errorTitle: "Error Message Translation",
+                featuresTitle: "✅ Implemented Features",
+                prankProviderError: "usePrank must be used within a PrankProvider",
+                mcdonalds: "McDonald's",
+                publicTransport: "Public Transport",
+                starbucks: "Starbucks",
+                monthlySalary: "Monthly Salary",
+                mcdonaldsDesc: "Fast food restaurant",
+                publicTransportDesc: "City transportation",
+                starbucksDesc: "Coffee shop",
+                monthlySalaryDesc: "Salary payment"
+            },
+            sv: {
+                transactionsTitle: "Exempel Transaktioner",
+                errorTitle: "Felmeddelande Översättning",
+                featuresTitle: "✅ Implementerade Funktioner",
+                prankProviderError: "usePrank måste användas inom en PrankProvider",
+                mcdonalds: "McDonald's",
+                publicTransport: "Kollektivtrafik",
+                starbucks: "Starbucks",
+                monthlySalary: "Månadslön",
+                mcdonaldsDesc: "Snabbmatsrestaurang",
+                publicTransportDesc: "Stadstransport",
+                starbucksDesc: "Kafé",
+                monthlySalaryDesc: "Lönutbetalning"
+            },
+            de: {
+                transactionsTitle: "Beispiel Transaktionen",
+                errorTitle: "Fehlermeldung Übersetzung",
+                featuresTitle: "✅ Implementierte Funktionen",
+                prankProviderError: "usePrank muss innerhalb eines PrankProviders verwendet werden",
+                mcdonalds: "McDonald's",
+                publicTransport: "Öffentliche Verkehrsmittel",
+                starbucks: "Starbucks",
+                monthlySalary: "Monatsgehalt",
+                mcdonaldsDesc: "Fast-Food-Restaurant",
+                publicTransportDesc: "Stadtverkehr",
+                starbucksDesc: "Café",
+                monthlySalaryDesc: "Gehaltszahlung"
+            },
+            fr: {
+                transactionsTitle: "Exemples de Transactions",
+                errorTitle: "Traduction du Message d'Erreur",
+                featuresTitle: "✅ Fonctionnalités Implémentées",
+                prankProviderError: "usePrank doit être utilisé dans un PrankProvider",
+                mcdonalds: "McDonald's",
+                publicTransport: "Transport Public",
+                starbucks: "Starbucks",
+                monthlySalary: "Salaire Mensuel",
+                mcdonaldsDesc: "Restaurant de restauration rapide",
+                publicTransportDesc: "Transport urbain",
+                starbucksDesc: "Café",
+                monthlySalaryDesc: "Paiement de salaire"
+            },
+            es: {
+                transactionsTitle: "Transacciones de Ejemplo",
+                errorTitle: "Traducción del Mensaje de Error",
+                featuresTitle: "✅ Funciones Implementadas",
+                prankProviderError: "usePrank debe ser usado dentro de un PrankProvider",
+                mcdonalds: "McDonald's",
+                publicTransport: "Transporte Público",
+                starbucks: "Starbucks",
+                monthlySalary: "Salario Mensual",
+                mcdonaldsDesc: "Restaurante de comida rápida",
+                publicTransportDesc: "Transporte urbano",
+                starbucksDesc: "Cafetería",
+                monthlySalaryDesc: "Pago de salario"
+            },
+            ru: {
+                transactionsTitle: "Примеры Транзакций",
+                errorTitle: "Перевод Сообщения об Ошибке",
+                featuresTitle: "✅ Реализованные Функции",
+                prankProviderError: "usePrank должен использоваться внутри PrankProvider",
+                mcdonalds: "McDonald's",
+                publicTransport: "Общественный Транспорт",
+                starbucks: "Starbucks",
+                monthlySalary: "Месячная Зарплата",
+                mcdonaldsDesc: "Ресторан быстрого питания",
+                publicTransportDesc: "Городской транспорт",
+                starbucksDesc: "Кофейня",
+                monthlySalaryDesc: "Выплата зарплаты"
+            },
+            zh: {
+                transactionsTitle: "示例交易",
+                errorTitle: "错误消息翻译",
+                featuresTitle: "✅ 已实现功能",
+                prankProviderError: "usePrank必须在PrankProvider内使用",
+                mcdonalds: "麦当劳",
+                publicTransport: "公共交通",
+                starbucks: "星巴克",
+                monthlySalary: "月薪",
+                mcdonaldsDesc: "快餐店",
+                publicTransportDesc: "城市交通",
+                starbucksDesc: "咖啡店",
+                monthlySalaryDesc: "工资支付"
+            }
+        };
+
+        const currencyMap = {
+            en: { currency: 'USD', symbol: '$', rate: 0.094 },
+            sv: { currency: 'SEK', symbol: 'kr', rate: 1 },
+            de: { currency: 'EUR', symbol: '€', rate: 0.086 },
+            fr: { currency: 'EUR', symbol: '€', rate: 0.086 },
+            es: { currency: 'EUR', symbol: '€', rate: 0.086 },
+            ru: { currency: 'RUB', symbol: '₽', rate: 8.7 },
+            zh: { currency: 'CNY', symbol: '¥', rate: 0.7 }
+        };
+
+        const sampleTransactions = [
+            { key: 'mcdonalds', amount: 89, type: 'expense' },
+            { key: 'publicTransport', amount: 45, type: 'expense' },
+            { key: 'starbucks', amount: 65, type: 'expense' },
+            { key: 'monthlySalary', amount: 25000, type: 'income' }
+        ];
+
+        let currentLanguage = 'en';
+
+        function formatCurrency(amount, language) {
+            const { currency, rate } = currencyMap[language];
+            const convertedAmount = Math.round(amount * rate);
+            
+            const localeMap = {
+                USD: 'en-US',
+                SEK: 'sv-SE',
+                EUR: 'de-DE',
+                RUB: 'ru-RU',
+                CNY: 'zh-CN'
+            };
+
+            return new Intl.NumberFormat(localeMap[currency], {
+                style: 'currency',
+                currency: currency
+            }).format(convertedAmount);
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            updateContent();
+        }
+
+        function updateContent() {
+            const t = translations[currentLanguage];
+            
+            // Update titles
+            document.getElementById('transactions-title').textContent = t.transactionsTitle;
+            document.getElementById('error-title').textContent = t.errorTitle;
+            document.getElementById('features-title').textContent = t.featuresTitle;
+            
+            // Update error message
+            document.getElementById('error-message').textContent = t.prankProviderError;
+            
+            // Update transactions
+            const container = document.getElementById('transactions-container');
+            container.innerHTML = '';
+            
+            sampleTransactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.className = 'transaction';
+                
+                const isIncome = transaction.type === 'income';
+                const amount = formatCurrency(transaction.amount, currentLanguage);
+                
+                div.innerHTML = `
+                    <div class="transaction-info">
+                        <div class="transaction-title">${t[transaction.key]}</div>
+                        <div class="transaction-desc">${t[transaction.key + 'Desc']}</div>
+                    </div>
+                    <div class="transaction-amount" style="color: ${isIncome ? '#38a169' : '#e74c3c'}">
+                        ${isIncome ? '+' : '-'}${amount}
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize
+        updateContent();
+    </script>
+</body>
+</html>
