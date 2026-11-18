@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Send, Plus, CreditCard, PiggyBank, TrendingUp, Bell } from 'lucide-react-native';
 import Animated, { FadeInDown, FadeInRight, useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import { Audio } from 'expo-av';
+import { playOnce } from '../../utils/sound';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { usePrank } from '../../contexts/PrankContext';
@@ -48,22 +48,8 @@ export default function HomeScreen() {
     receiver: string;
   } | null>(null);
 
-  const playRequestSound = async () => {
-    try {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../../assets/sounds/a-pay.mp3')
-      );
-      await sound.playAsync();
-      
-      // Unload sound after playing
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          sound.unloadAsync();
-        }
-      });
-    } catch (error) {
-      console.log('Error playing sound:', error);
-    }
+  const playRequestSound = () => {
+    playOnce(require('../../assets/sounds/a-pay.mp3'));
   };
 
   const handleSendMoney = () => {

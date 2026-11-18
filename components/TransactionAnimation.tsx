@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Modal } from 'react-native';
-import { Audio } from 'expo-av';
+import { playOnce } from '../utils/sound';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -34,22 +34,8 @@ export default function TransactionAnimation({
   const opacity = useSharedValue(0);
   const checkScale = useSharedValue(0);
 
-  const playRequestSound = async () => {
-    try {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/sounds/a-pay.mp3')
-      );
-      await sound.playAsync();
-      
-      // Unload sound after playing
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          sound.unloadAsync();
-        }
-      });
-    } catch (error) {
-      console.log('Error playing sound:', error);
-    }
+  const playRequestSound = () => {
+    playOnce(require('../assets/sounds/a-pay.mp3'));
   };
 
   const generateTransactionId = () => {

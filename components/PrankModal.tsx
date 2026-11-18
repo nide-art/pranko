@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Platform } from 'react-native';
-import { Audio } from 'expo-av';
+import type { AudioPlayer } from 'expo-audio';
+import { playLoop, stopPlayer } from '../utils/sound';
 import { Asset } from 'expo-asset';
 import { X, AlertTriangle as AlertTriangle } from 'lucide-react-native';
 import { useTheme } from '../contexts/ThemeContext';
@@ -24,13 +25,12 @@ export default function PrankModal({ visible, onClose }: PrankModalProps) {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const { settings } = usePrank();
-  const soundRef = useRef<Audio.Sound | null>(null);
+  const soundRef = useRef<AudioPlayer | null>(null);
 
   const playLaughterSound = async () => {
     try {
-      if (soundRef.current) {
-        await soundRef.current.unloadAsync();
-      }
+      stopPlayer(soundRef.current);
+      soundRef.current = null;
 
       let soundSource;
       if (settings.laughterSound?.startsWith('file://') || settings.laughterSound?.startsWith('content://')) {
@@ -52,13 +52,7 @@ export default function PrankModal({ visible, onClose }: PrankModalProps) {
         }
       }
 
-      const { sound } = await Audio.Sound.createAsync(soundSource, {
-        isLooping: true,
-        volume: 0.8,
-      });
-      
-      soundRef.current = sound;
-      await sound.playAsync();
+      soundRef.current = playLoop(soundSource, 0.8);
     } catch (error) {
       console.log('Error playing laughter sound:', error);
     }
@@ -66,11 +60,8 @@ export default function PrankModal({ visible, onClose }: PrankModalProps) {
 
   const stopLaughterSound = async () => {
     try {
-      if (soundRef.current) {
-        await soundRef.current.stopAsync();
-        await soundRef.current.unloadAsync();
-        soundRef.current = null;
-      }
+      stopPlayer(soundRef.current);
+      soundRef.current = null;
     } catch (error) {
       console.log('Error stopping laughter sound:', error);
     }
