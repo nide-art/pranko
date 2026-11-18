@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "bolt-expo-nativewind",
-    "slug": "bolt-expo-nativewind",
+    "name": "prankbank",
+    "slug": "prankbank",
     "version": "1.0.0",
     "sdkVersion": "57.0.0",
     "orientation": "portrait",
@@ -29,6 +29,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "owner": "nide.art",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3ad71390-d2c7-4518-9d81-ed9682bbc6aa"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3ad71390-d2c7-4518-9d81-ed9682bbc6aa"
+      }
     }
   }
 }
